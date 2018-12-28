@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Jugar: Capitales</title>
+  <link rel="shortcut icon" href="imagenes/e.png"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <script src="https://code.jquery.com/jquery.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Geografía Europea</h1>
+  </header>
+  <nav class="navbar navbar-expand-sm fondoMenu">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link letramenu2" href="index.html">Página principal</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link letramenu2" href="teoria.html">Teoría</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link letramenu2" href="contacta.html">Contactar</a>
+      </li>
+      <li class="nav-item">
+        <span class="nav-link letramenu3" href="#">Próximamente...</span>
+      </li>
+    </ul>
+  </nav>
+  <div class="container img">
+    <div class="row" id="imagenes">
+      <div class="col">
+        <div id="imagenPais"></div>
+      </div>
+      <div class="col todo">
+        <div id="pregunta" class="preguntas">¿Cuál es la capital de este país?</div>
+        <div id="respuestas" class="respuestas"></div>
+      </div>
+    </div>
+    <div class="row" id="puntuacion">
+      <div class="col">
+        <div class="punt"><span id="contador" class="numero">0</span> Puntos</div>
+      </div>
+    </div>
+  </div>
+  <script>
+  var imagenes = [
+    "imagenes/donde-paises_files/francia2.jpg",
+    "imagenes/donde-paises_files/españadeverdad.jpg",
+    "imagenes/donde-paises_files/italia2.jpg",
+    "imagenes/donde-paises_files/austria.jpg",
+    "imagenes/donde-paises_files/islandia.jpg",
+    "imagenes/donde-paises_files/alemania.jpg",
+    "imagenes/donde-paises_files/dinamarca.jpg",
+    "imagenes/donde-paises_files/armenia.jpg",
+    "imagenes/donde-paises_files/rcheca.jpg",
+    "imagenes/donde-paises_files/portugal.jpg"
+
+  ];
+  var respuestas = [
+    ["Paris", "Londres", "Verna", "Oslo"],
+    ["Madrid", "Paris", "LaValleta", "Chisinau"],
+    ["Roma", "Londres", "Sarajevo", "Kiev"],
+    ["Viena", "Tallin", "Minsk", "Bruselas"],
+    ["Reikiavik", "Paris", "Dublin", "Podgorica"],
+    ["Berlin", "Moscu", "Roma", "Oslo"],
+    ["Copenhage", "Lisboa", "Vilna", "Helsinki"],
+    ["Erevan", "Tiflis", "Riga", "Luxemburgo"],
+    ["Praga", "Amsterdam", "Vaduz", "Bucarest"],
+    ["Lisboa", "Verna", "Estocolmo", "Andorra"]
+  ];
+  var contador= 0;
+  var npreguntas= 0;
+  jugar();
+  var indicie_respuesta_correcta;
+
+  function jugar(){
+    var indice_aleatorio = Math.floor(Math.random()*imagenes.length);
+    var respuestas_posibles = respuestas[indice_aleatorio];
+    var posiciones = [0,1,2,3];
+    var respuestas_reordenadas = [];
+
+    var ya_se_metio = false;
+    for(i in respuestas_posibles){
+      var posicion_aleatoria = Math.floor(Math.random()*posiciones.length);
+      if(posicion_aleatoria==0 && ya_se_metio == false){
+        indicie_respuesta_correcta =i;
+        ya_se_metio = true;
+      }
+      respuestas_reordenadas[i] = respuestas_posibles[posiciones[posicion_aleatoria]];
+      posiciones.splice(posicion_aleatoria, 1);
+    }
+
+    var txt_respuestas="";
+    for(i in respuestas_reordenadas){
+      txt_respuestas += '<input type="radio" name="pp" value="'+i+'" onclick="comprobar()"><label>'+respuestas_reordenadas[i]+'</label><br>';
+    }
+
+    document.getElementById("respuestas").innerHTML = txt_respuestas;
+    document.getElementById("imagenPais").innerHTML = "<img style='width:350px;' src='" + imagenes[indice_aleatorio] + "'/>";
+
+  }
+  function comprobar(){
+    var respuesta = $("input[type=radio]:checked").val();
+    if(respuesta ==indicie_respuesta_correcta){
+      contador+= 2;
+      npreguntas+= 1;
+      alert("Bien hecho");
+    }
+    else{
+      contador-= 1;
+      npreguntas+= 1;
+      alert("Deberias estudiar un poco");
+    }
+    document.getElementById("contador").innerHTML = contador;
+    if (npreguntas >= 6){
+      document.getElementById("imagenes").innerHTML = "<h1 class='letramenu4'>Fin de la partida, tu puntacion ha sido de " + contador + " puntos.</h1>";
+      document.getElementById("puntuacion").innerHTML = "<a href='llama-capitales.html' class='btn btn-secondary btn-lg btn-block'>Reintentar</a>";
+    } else {
+    jugar();
+  }
+  }
+</script>
+
+
+
+</body>
+</html>
